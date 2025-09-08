@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marx Wiström - Capture Reality</title>
+    <meta name="description" content="Marx Wiström - Capture Reality">
+    <script type="module" src="./src/main.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h2 class="nav-name">Capture the moment</h2>
+            <ul class="nav-menu">
+                <li><a href="#about">Inspiration</a></li>
+                <li><a href="#skills">Highlights</a></li>
+                <li><a href="#projects">Gallery</a></li>
+                <li><a href="#contact">Daily Experiences</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1 class="hero-title">Welcome to <span class="highlight">Capture Reality</span></h1>
+            <p class="hero-subtitle">Capture your journey through life's experiences & remember your days</p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary">Gallery</a>
+                <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Inspiration</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Life is a journey filled with countless steps, each one shaping who we are and who we become. Along the way, we gather experiences like treasures—some joyful, some challenging, but all meaningful. Every memory, whether bright or difficult, holds a lesson that reminds us of our strength, resilience, and growth.
+
+                        As we look back, we can see how far we’ve come: the laughter shared with loved ones, the quiet moments of reflection, the unexpected turns that led us to new opportunities. These memories are markers of a life lived fully, reminders that even the smallest experiences can leave a lasting imprint on our hearts.
+                        
+                        Moving forward, we carry these experiences with us not as weights, but as guiding lights. They remind us to cherish the present, to find hope in tomorrow, and to honor the path we’ve already walked. Life’s journey is not about rushing to the destination—it’s about appreciating the road, embracing the lessons, and celebrating the beauty of having lived.</p>
+                    <p></p>
+                </div>
+                <div class="about-image">
+                    <div class="placeholder-image">👨‍💻</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2>Special Moments - Highlights</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Summer 2025</h3>
+                    <ul>
+                        <li>Grönö 70års fest</li>
+                        <li>Visfestivalen</li>
+                        <li>Sesh med Mary</li>
+                        <li>Nya Lägenheten</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li>Node.js</li>
+                        <li>Python</li>
+                        <li>PostgreSQL</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Tools & Design</h3>
+                    <ul>
+                        <li>Git & GitHub</li>
+                        <li>Cursor</li>
+                        <li>VS Code</li>
+                    </ul>
+                </div>
+            </div>  
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Gallery</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">🚀</div>
+                    <h3>My Gallery</h3>
+                    <p>My saved photo albums</p>
+                    <div class="project-tech">
+                        <span>Album 1</span>
+                        <span>Album 2</span>
+                        <span>Album 3</span>
+                        <span>Album 4</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="btn btn-small">Overview</a>
+                        <a href="#" class="btn btn-small btn-outline">Album Search</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Daily Experiences</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p>Save the day !</p>
+                    <div class="contact-details">
+                        <p>📧 marx.wistrom@email.com</p>
+                        <p>📱 +46 123 456 789</p>
+                        <p>📍 Västervik, Sweden</p>
+                    </div>
+                </div>
+                <form id="contact-form" class="contact-form">
+                    <div class="form-group">
+                        <label for="day-date">Day/Date</label>
+                        <input type="text" id="day-date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="place-location">Place and Location</label>
+                        <input type="text" id="place-location" name="location" placeholder="Enter place and location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="story-experience">Story</label>
+                        <textarea id="story-experience" name="story" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save the moment</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Marx Wiström. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
