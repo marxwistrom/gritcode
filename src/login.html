@@ -37,16 +37,33 @@
         </div>
     </div>
     </body>
-    <script src="./scripts/login.js"></script>
     <script type="module" src="./scripts/auth.js"></script>
     <script>
-        // Check if user is already logged in and redirect to index
+        // Wait for auth module to load and check login status
+        function waitForAuthAndCheck() {
+            return new Promise((resolve) => {
+                const checkAuth = () => {
+                    if (window.auth && typeof window.auth.isLoggedIn === 'function') {
+                        // Auth is loaded, check if user is already logged in
+                        if (window.auth.isLoggedIn()) {
+                            console.log('User already logged in, redirecting to index');
+                            window.location.href = 'index.html';
+                            return;
+                        }
+                        console.log('User not logged in, showing login form');
+                        resolve();
+                    } else {
+                        // Auth not ready yet, check again in 200ms
+                        setTimeout(checkAuth, 200);
+                    }
+                };
+                checkAuth();
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                if (window.auth && window.auth.isLoggedIn()) {
-                    window.location.href = 'index.html';
-                }
-            }, 100);
+            waitForAuthAndCheck();
         });
     </script>
+    <script src="./scripts/login.js"></script>
 </html>

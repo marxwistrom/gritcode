@@ -114,9 +114,9 @@ function validateUserCredentials(email, password) {
     // For now, using simple hardcoded validation
     // In production, this should query a database
     const validUsers = [
-        { email: 'admin@test.com', password: 'admin123', name: 'Admin User', role: 'admin' },
-        { email: 'user@test.com', password: 'user123', name: 'Regular User', role: 'user' },
-        { email: 'demo@test.com', password: 'demo123', name: 'Demo User', role: 'user' }
+        { email: 'admin@test.com', password: 'AdminSecure2025!', name: 'Admin User', role: 'admin' },
+        { email: 'user@test.com', password: 'UserSecure2025!', name: 'Regular User', role: 'user' },
+        { email: 'demo@test.com', password: 'DemoSecure2025!', name: 'Demo User', role: 'user' }
     ];
 
     const user = validUsers.find(u => u.email === email && u.password === password);

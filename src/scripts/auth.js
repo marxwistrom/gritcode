@@ -6,7 +6,7 @@
 class Auth {
     constructor() {
         this.currentUser = null;
-        this.sessionKey = 'capture_reality_user';
+        this.storageKey = 'capture_reality_user';
         this.init();
     }
 
@@ -14,11 +14,17 @@ class Auth {
      * Initialize authentication state
      */
     init() {
-        // Check if user is already logged in from session storage
-        const storedUser = this.getStoredUser();
-        if (storedUser) {
-            this.currentUser = storedUser;
-        }
+        // Delay to ensure localStorage is ready and other scripts have loaded
+        setTimeout(() => {
+            // Check if user is already logged in from localStorage
+            const storedUser = this.getStoredUser();
+            if (storedUser) {
+                this.currentUser = storedUser;
+                console.log('User restored from localStorage:', storedUser);
+            } else {
+                console.log('No user found in localStorage');
+            }
+        }, 100); // Increased delay to ensure other scripts are ready
     }
 
     /**
@@ -29,6 +35,7 @@ class Auth {
      */
     async login(email, password) {
         try {
+            console.log('Attempting login for:', email);
             const response = await fetch('http://localhost:3000/api/login', {
                 method: 'POST',
                 headers: {
@@ -37,7 +44,9 @@ class Auth {
                 body: JSON.stringify({ email, password })
             });
 
+            console.log('Login response status:', response.status);
             const data = await response.json();
+            console.log('Login response data:', data);
 
             if (response.ok && data.success) {
                 // Create user object
@@ -48,9 +57,13 @@ class Auth {
                     loggedInAt: new Date().toISOString()
                 };
 
+                console.log('Login successful, user data:', data.user);
+                console.log('Created user object:', user);
+
                 this.currentUser = user;
                 this.storeUser(user);
 
+                console.log('User stored, currentUser set');
                 return { success: true, user: user };
             } else {
                 return { success: false, message: data.message || 'Login failed' };
@@ -75,7 +88,9 @@ class Auth {
      * @returns {boolean} Login status
      */
     isLoggedIn() {
-        return this.currentUser !== null;
+        const isLoggedIn = this.currentUser !== null;
+        console.log('isLoggedIn() called:', isLoggedIn, 'currentUser:', this.currentUser);
+        return isLoggedIn;
     }
 
     /**
@@ -96,25 +111,46 @@ class Auth {
     }
 
     /**
-     * Store user in session storage
+     * Store user in localStorage
      * @param {Object} user - User object to store
      */
     storeUser(user) {
         try {
-            sessionStorage.setItem(this.sessionKey, JSON.stringify(user));
+            // Check if localStorage is available
+            if (typeof Storage === 'undefined') {
+                console.error('localStorage is not available');
+                return;
+            }
+
+            localStorage.setItem(this.storageKey, JSON.stringify(user));
+            console.log('User stored in localStorage:', user);
+            console.log('Storage key used:', this.storageKey);
         } catch (error) {
             console.error('Error storing user:', error);
         }
     }
 
     /**
-     * Get stored user from session storage
+     * Get stored user from localStorage
      * @returns {Object|null} Stored user object
      */
     getStoredUser() {
         try {
-            const stored = sessionStorage.getItem(this.sessionKey);
-            return stored ? JSON.parse(stored) : null;
+            // Check if localStorage is available
+            if (typeof Storage === 'undefined') {
+                console.error('localStorage is not available');
+                return null;
+            }
+
+            const stored = localStorage.getItem(this.storageKey);
+            console.log('Retrieving user from localStorage:', stored ? 'Found' : 'Not found');
+            console.log('Storage key used:', this.storageKey);
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                console.log('Parsed user:', parsed);
+                return parsed;
+            }
+            return null;
         } catch (error) {
             console.error('Error retrieving stored user:', error);
             return null;
@@ -122,13 +158,36 @@ class Auth {
     }
 
     /**
-     * Clear stored user from session storage
+     * Clear stored user from localStorage
      */
     clearStoredUser() {
         try {
-            sessionStorage.removeItem(this.sessionKey);
+            localStorage.removeItem(this.storageKey);
+            console.log('User cleared from localStorage');
         } catch (error) {
             console.error('Error clearing stored user:', error);
+        }
+    }
+
+    /**
+     * Debug method to check localStorage state
+     */
+    debugLocalStorage() {
+        try {
+            if (typeof Storage === 'undefined') {
+                console.error('localStorage is not supported');
+                return;
+            }
+
+            console.log('=== localStorage Debug ===');
+            console.log('Storage key:', this.storageKey);
+            console.log('All localStorage keys:', Object.keys(localStorage));
+            console.log('Stored value:', localStorage.getItem(this.storageKey));
+            console.log('Current user:', this.currentUser);
+            console.log('Is logged in:', this.isLoggedIn());
+            console.log('===========================');
+        } catch (error) {
+            console.error('Error in debugLocalStorage:', error);
         }
     }
 

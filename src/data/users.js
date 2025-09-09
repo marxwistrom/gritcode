@@ -3,21 +3,21 @@ const users = [
     {
         id: 1,
         email: 'admin@test.com',
-        password: 'admin123', // In production, this should be hashed
+        password: 'AdminSecure2025!', // In production, this should be hashed
         name: 'Admin User',
         role: 'admin'
     },
     {
         id: 2,
         email: 'user@test.com',
-        password: 'user123',
+        password: 'UserSecure2025!',
         name: 'Regular User',
         role: 'user'
     },
     {
         id: 3,
         email: 'demo@test.com',
-        password: 'demo123',
+        password: 'DemoSecure2025!',
         name: 'Demo User',
         role: 'user'
     }
