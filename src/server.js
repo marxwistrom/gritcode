@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
     res.sendFile("index.html", { root: "." })
 })
 
-app.post("/api/experiences", async (req, res) => {
+app.post("/api/e", async (req, res) => {
     try {
         const { date, location, title, story } = req.body
 
@@ -32,6 +32,23 @@ app.post("/api/experiences", async (req, res) => {
             })
         }
 
+        app.post('/api/e', async (req, res) => {
+    try {
+        console.log('Received form data:', req.body); // Add this log
+        const memory = new Memory(req.body);
+        await memory.save();
+        console.log('Memory saved to database:', memory); // Add this log
+        res.status(201).json({ message: 'Memory saved successfully' });
+    } catch (error) {
+        console.error('Server error:', error); // Add this log
+        res.status(500).json({ message: 'Error saving memory' });
+    }
+});
+
+mongoose.connect('mongodb://localhost:27017/memories')
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err));
+    
         await client.connect()
         const db = client.db(dbName)
         const collection = db.collection(collectionName)
@@ -62,7 +79,7 @@ app.post("/api/experiences", async (req, res) => {
 })
 
 // GET endpoint to retrieve experiences
-app.get("/api/experiences", async (req, res) => {
+app.get("/api/e", async (req, res) => {
     try {
         await client.connect()
         const db = client.db(dbName)

@@ -49,6 +49,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactContent = document.querySelector('.contact-content');
     const contactForm = document.getElementById('contact-form');
 
+    contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    console.log('Form submitted'); // Add this log
+
+    const formData = {
+        date: document.getElementById('date').value,
+        place: document.getElementById('place').value,
+        title: document.getElementById('title').value,
+        story: document.getElementById('story').value
+    };
+    console.log('Form data being sent:', formData); // Add this log
+
+    try {
+        const response = await fetch('http://localhost:3000/api/e', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+
+        console.log('Response status:', response.status); // Add this log
+        const responseData = await response.json();
+        console.log('Response data:', responseData); // Add this log
+
+        if (!response.ok) {
+            throw new Error('Failed to save memory');
+        }
+
+        showSuccessMessage('Memory saved successfully!');
+        contactForm.reset();
+        contactContent.classList.add('hidden');
+        toggleBtn.textContent = 'Share Your Memory';
+
+    } catch (error) {
+        console.error('Detailed error:', error); // Add this log
+        showErrorMessage('Failed to save memory');
+    }
+});
+
     // Ensure form is hidden on page load
     if (contactContent) {
         contactContent.classList.add('hidden');
@@ -62,4 +102,20 @@ document.addEventListener('DOMContentLoaded', () => {
             : 'Close Form';
     });
 });
+
+    function showSuccessMessage(message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('success-message');
+    messageDiv.textContent = message;
+    document.body.appendChild(messageDiv);
+    setTimeout(() => messageDiv.remove(), 3000);
+}
+
+function showErrorMessage(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.classList.add('error-message');
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+    setTimeout(() => errorDiv.remove(), 3000);
+}
 
