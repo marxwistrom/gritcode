@@ -13,24 +13,26 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
+            <img src="./images/logo.png" alt="CR logo" class="resize-image">
             <h2 class="nav-name">Capture the moment</h2>
             <ul class="nav-menu">
                 <li><a href="#about">Inspiration</a></li>
                 <li><a href="#skills">Highlights</a></li>
                 <li><a href="#projects">Gallery</a></li>
                 <li><a href="#contact">Daily Experiences</a></li>
-            </ul>
+                </ul>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero">
+        <div class="hero-overlay"></div>
         <div class="hero-container">
             <h1 class="hero-title">Welcome to <span class="highlight">Capture Reality</span></h1>
             <p class="hero-subtitle">Capture your journey through life's experiences & remember your days</p>
             <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary">Gallery</a>
-                <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                <a href="#projects" class="btn btn-primary">My Gallery</a>
+                <a href="#contact" class="btn btn-secondary">Memory Lane</a>
             </div>
         </div>
     </section>
@@ -115,36 +117,34 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Daily Experiences</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <p>Save the day !</p>
-                    <div class="contact-details">
-                        <p>📧 marx.wistrom@email.com</p>
-                        <p>📱 +46 123 456 789</p>
-                        <p>📍 Västervik, Sweden</p>
-                    </div>
-                </div>
-                <form id="contact-form" class="contact-form">
-                    <div class="form-group">
-                        <label for="day-date">Day/Date</label>
-                        <input type="text" id="day-date" name="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="place-location">Place and Location</label>
-                        <input type="text" id="place-location" name="location" placeholder="Enter place and location" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="story-experience">Story</label>
-                        <textarea id="story-experience" name="story" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save the moment</button>
-                </form>
-            </div>
+<section id="contact" class="contact">
+    <div class="contact-bg-overlay"></div>
+    <div class="container">
+        <h2>Your Memory, Your Thoughts</h2>
+        <button class="toggle-form-btn btn btn-primary">Share Your Memory</button>
+        <div class="contact-content hidden">
+            <form id="contact-form" class="contact-form">
+    <div class="form-group">
+        <label for="date">Day/Date:</label>
+        <input type="date" id="date" name="date" required>
+    </div>
+    <div class="form-group">
+        <label for="place">Place:</label>
+        <input type="text" id="place" name="place" placeholder="Where did it happen?" required>
+    </div>
+    <div class="form-group">
+        <label for="title">Memory Title:</label>
+        <input type="text" id="title" name="title" placeholder="Give your memory a title" required>
+    </div>
+    <div class="form-group">
+        <label for="story">Your Story:</label>
+        <textarea id="story" name="story" placeholder="Share your experience..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save the moment</button>
+</form>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer class="footer">

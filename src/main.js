@@ -12,48 +12,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 
-document.getElementById("contact-form").addEventListener("submit", async function(event) {
-    event.preventDefault();
-
-    const date = document.getElementById("day-date").value.trim();
-    const location = document.getElementById("place-location").value.trim();
-    const story = document.getElementById("story-experience").value.trim();
-
-
-    if (!date || !location || !story) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
-    try {
-        const response = await fetch('http://localhost:3000/api/experiences', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                date: date,
-                location: location,
-                story: story
-            })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert(`Thank you! Your experience has been saved successfully.`);
-            this.reset();
-        } else {
-            alert(`Error: ${data.error}`);
-        }
-
-    } catch (error) {
-        console.error("Network error:", error);
-        alert("There was an error saving your experience. Please make sure the server is running.");
-    }
-});
-
-
 //Gör navigationen något mer genomskinlig när användaren scrollar ner
 window.addEventListener('scroll', function() {
     const navbar = document.querySelector('.navbar');
@@ -84,5 +42,24 @@ document.querySelectorAll('section:not(.hero)').forEach(section => {
     section.style.transform = 'translateY(20px)';
     section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(section);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.querySelector('.toggle-form-btn');
+    const contactContent = document.querySelector('.contact-content');
+    const contactForm = document.getElementById('contact-form');
+
+    // Ensure form is hidden on page load
+    if (contactContent) {
+        contactContent.classList.add('hidden');
+    }
+
+    // Toggle form visibility when button is clicked
+    toggleBtn.addEventListener('click', () => {
+        contactContent.classList.toggle('hidden');
+        toggleBtn.textContent = contactContent.classList.contains('hidden') 
+            ? 'Share Your Memory' 
+            : 'Close Form';
+    });
 });
 

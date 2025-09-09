@@ -29,6 +29,13 @@ body {
     padding: 0 20px;
 }
 
+
+.resize-image {
+    width: 10%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
 /* Navigation */
 .navbar {
     position: fixed;
@@ -79,11 +86,12 @@ body {
     height: 100vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, rgba(15, 15, 35, 0.8) 0%, rgba(26, 26, 46, 0.8) 100%),
-                url('images/backgroundpage.png');
+    background-image: url('../images/backgroundpage.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
     position: relative;
     overflow: hidden;
 }
@@ -97,6 +105,15 @@ body {
     bottom: 0;
     background: radial-gradient(circle at 30% 70%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 70% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
 }
 
 .hero-container {
@@ -113,6 +130,7 @@ body {
     font-weight: 700;
     margin-bottom: 1rem;
     color: #e2e8f0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(96, 165, 250, 0.3);
 }
 
 .highlight {
@@ -127,6 +145,7 @@ body {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .hero-buttons {
@@ -321,6 +340,31 @@ h3 {
 }
 
 /* Contact Section */
+
+.contact {
+    position: relative;
+    background-image: url('../images/backgroundbottom.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Optional: creates parallax effect */
+    padding: 80px 0;
+    color: white;
+}
+
+.contact-bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+}
+
+.contact .container {
+    position: relative;
+    z-index: 1; /* Places content above the overlay */
+}
+
 .contact-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -328,7 +372,34 @@ h3 {
     align-items: start;
 }
 
-.contact-info p {
+.contact-content {
+    opacity: 1;
+    max-height: 2000px; /* Adjust based on your form's height */
+    transition: all 0.5s ease-in-out;
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.contact-content.hidden {
+    opacity: 0;
+    max-height: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
+.toggle-form-btn {
+    display: block;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.toggle-form-btn:hover {
+    transform: translateY(-2px);
+}
+
+.contact-info {
     color: #94a3b8;
     margin-bottom: 2rem;
     font-size: 1.125rem;
@@ -342,10 +413,11 @@ h3 {
 }
 
 .contact-form {
-    background: rgba(255, 255, 255, 0.05);
+    background: #1a1a2e; /* Solid background color instead of rgba */
     padding: 2rem;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: adds depth */
 }
 
 .form-group {
@@ -362,13 +434,13 @@ h3 {
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 16px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    color: #e2e8f0;
-    font-family: inherit;
     font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: all 0.3s ease;
 }
 
 .form-group input:focus,
@@ -376,6 +448,15 @@ h3 {
     outline: none;
     border-color: #60a5fa;
     box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.contact .form-group input::placeholder,
+.contact .form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.contact label {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .form-group textarea {
@@ -459,3 +540,4 @@ h3 {
         font-size: 1rem;
     }
 }
+

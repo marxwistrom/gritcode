@@ -23,10 +23,10 @@ app.get("/", (req, res) => {
 
 app.post("/api/experiences", async (req, res) => {
     try {
-        const { date, location, story } = req.body
+        const { date, location, title, story } = req.body
 
         // Validation
-        if (!date || !location || !story) {
+        if (!date || !location || !title || !story) {
             return res.status(400).json({
                 error: "All fields are required"
             })
@@ -39,6 +39,7 @@ app.post("/api/experiences", async (req, res) => {
         const experience = {
             date: date,
             location: location,
+            title: title,
             story: story,
             timestamp: new Date()
         }
