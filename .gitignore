@@ -1,2 +1,6 @@
-node_modules/
-.env
+# Node.js
+server/node_modules/
+server/.env
+
+# VS Code settings
+.vscode/

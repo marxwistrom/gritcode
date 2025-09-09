@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -38,7 +39,7 @@ app.use('/styles', express.static(path.join(__dirname, '../src/styles')));
 
 
 // MongoDB connection
-mongoose.connect('mongodb://127.0.0.1:27017/memories', {
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -108,6 +109,57 @@ app.post('/api/e', validateMemory, async (req, res) => {
     }
 });
 
+// Simple user validation function (replace with database lookup in production)
+function validateUserCredentials(email, password) {
+    // For now, using simple hardcoded validation
+    // In production, this should query a database
+    const validUsers = [
+        { email: 'admin@test.com', password: 'admin123', name: 'Admin User', role: 'admin' },
+        { email: 'user@test.com', password: 'user123', name: 'Regular User', role: 'user' },
+        { email: 'demo@test.com', password: 'demo123', name: 'Demo User', role: 'user' }
+    ];
+
+    const user = validUsers.find(u => u.email === email && u.password === password);
+    return user ? { ...user, password: undefined } : null; // Remove password from response
+}
+
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Validate input
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email and password are required'
+            });
+        }
+
+        // Validate user credentials
+        const user = validateUserCredentials(email, password);
+
+        if (user) {
+            res.status(200).json({
+                success: true,
+                message: 'Login successful',
+                user: user
+            });
+        } else {
+            res.status(401).json({
+                success: false,
+                message: 'Invalid email or password'
+            });
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error during login'
+        });
+    }
+});
+
+
 // Get all memories (optional)
 app.get('/api/e', async (req, res) => {
     try {
@@ -126,7 +178,7 @@ app.get('/api/e', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../src/index.html'));
+    res.sendFile(path.join(__dirname, '../src/login.html'));
 });
 
 
@@ -140,7 +192,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

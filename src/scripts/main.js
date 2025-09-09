@@ -45,6 +45,13 @@ document.querySelectorAll('section:not(.hero)').forEach(section => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    if (!isLoggedIn) {
+        window.location.href = 'login.html';
+        return;
+    }
+});
     const toggleBtn = document.querySelector('.toggle-form-btn');
     const contactContent = document.querySelector('.contact-content');
     const contactForm = document.getElementById('contact-form');
@@ -81,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showSuccessMessage('Memory saved successfully!');
         contactForm.reset();
         contactContent.classList.add('hidden');
-        toggleBtn.textContent = 'Share Your Memory';
+        toggleBtn.textContent = 'Save Your Memory';
 
     } catch (error) {
         console.error('Detailed error:', error); // Add this log
@@ -98,10 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleBtn.addEventListener('click', () => {
         contactContent.classList.toggle('hidden');
         toggleBtn.textContent = contactContent.classList.contains('hidden') 
-            ? 'Share Your Memory' 
+            ? 'Save Your Memory' 
             : 'Close Form';
     });
-});
+
 
     function showSuccessMessage(message) {
     const messageDiv = document.createElement('div');
@@ -119,3 +126,14 @@ function showErrorMessage(message) {
     setTimeout(() => errorDiv.remove(), 3000);
 }
 
+function checkAuth() {
+    const isLoggedIn = sessionStorage.getItem('loggedIn');
+    const userRole = sessionStorage.getItem('userRole');
+    
+    if (!isLoggedIn || userRole !== 'admin') {
+        window.location.href = 'login.html';
+    }
+}
+
+// Export for use in other files
+export default checkAuth;
