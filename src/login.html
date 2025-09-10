@@ -40,18 +40,19 @@
     <script type="module" src="./scripts/auth.js"></script>
     <script>
         // Wait for auth module to load and check login status
-        function waitForAuthAndCheck() {
+        async function waitForAuthAndCheck() {
             return new Promise((resolve) => {
                 const checkAuth = () => {
-                    if (window.auth && typeof window.auth.isLoggedIn === 'function') {
+                    if (window.auth && typeof window.auth.preventAuthPage === 'function') {
                         // Auth is loaded, check if user is already logged in
-                        if (window.auth.isLoggedIn()) {
-                            console.log('User already logged in, redirecting to index');
-                            window.location.href = 'index.html';
-                            return;
-                        }
-                        console.log('User not logged in, showing login form');
-                        resolve();
+                        window.auth.preventAuthPage().then((shouldShowLogin) => {
+                            if (!shouldShowLogin) {
+                                console.log('User already logged in, redirect handled by preventAuthPage');
+                                return;
+                            }
+                            console.log('User not logged in, showing login form');
+                            resolve();
+                        });
                     } else {
                         // Auth not ready yet, check again in 200ms
                         setTimeout(checkAuth, 200);

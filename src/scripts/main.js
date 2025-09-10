@@ -44,12 +44,17 @@ document.querySelectorAll('section:not(.hero)').forEach(section => {
     observer.observe(section);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    checkAuth();
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-    if (!isLoggedIn) {
-        window.location.href = 'login.html';
-        return;
+document.addEventListener('DOMContentLoaded', async () => {
+    // Let the auth module handle authentication checks
+    if (window.auth) {
+        await window.auth.requireAuth();
+    } else {
+        // Fallback if auth module isn't loaded yet
+        setTimeout(async () => {
+            if (window.auth) {
+                await window.auth.requireAuth();
+            }
+        }, 500);
     }
 });
     const toggleBtn = document.querySelector('.toggle-form-btn');
@@ -69,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Form data being sent:', formData); // Add this log
 
     try {
-        const response = await fetch('http://localhost:3000/api/e', {
+        const response = await fetch('http://localhost:4000/api/e', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -129,44 +134,20 @@ function showErrorMessage(message) {
 // Old authentication check removed - now using auth module
 
 // Wait for auth module to load and then check authentication
-function waitForAuthAndCheck() {
+async function waitForAuthAndCheck() {
     return new Promise((resolve) => {
-        const checkAuth = () => {
-            if (window.auth && typeof window.auth.isLoggedIn === 'function') {
-                // Auth is loaded, now check if user is logged in
-                console.log('Auth module loaded, checking login status...');
+        const checkAuth = async () => {
+            if (window.auth && typeof window.auth.requireAuth === 'function') {
+                // Auth is loaded, use requireAuth to check and handle redirects
+                console.log('Auth module loaded, checking authentication...');
 
-                // Debug localStorage state
-                if (window.auth.debugLocalStorage) {
-                    window.auth.debugLocalStorage();
-                }
+                const isAuthenticated = await window.auth.requireAuth();
 
-                console.log('Current user in auth:', window.auth.currentUser);
-                console.log('Is logged in:', window.auth.isLoggedIn());
-
-                // Check if user is logged in via auth module OR fallback to localStorage
-                let userLoggedIn = window.auth.isLoggedIn();
-
-                // Fallback: check localStorage directly if auth module isn't ready
-                if (!userLoggedIn) {
-                    try {
-                        const storedUser = localStorage.getItem('capture_reality_user');
-                        if (storedUser) {
-                            const parsedUser = JSON.parse(storedUser);
-                            console.log('Fallback check found user in localStorage:', parsedUser);
-                            userLoggedIn = true;
-                        }
-                    } catch (error) {
-                        console.log('Fallback localStorage check failed:', error);
-                    }
-                }
-
-                if (!userLoggedIn) {
-                    console.log('User not logged in, redirecting to login');
-                    window.location.href = 'login.html';
-                } else {
-                    console.log('User is logged in, initializing main app');
+                if (isAuthenticated) {
+                    console.log('User is authenticated, initializing main app');
                     initializeMainApp();
+                } else {
+                    console.log('User not authenticated, redirect handled by requireAuth');
                 }
                 resolve();
             } else {
@@ -212,11 +193,11 @@ function addLogoutButton() {
     logoutBtn.onmouseover = () => logoutBtn.style.color = '#3b82f6';
     logoutBtn.onmouseout = () => logoutBtn.style.color = '#60a5fa';
 
-    logoutBtn.onclick = (e) => {
+    logoutBtn.onclick = async (e) => {
         e.preventDefault();
         if (window.auth && window.auth.logout) {
             console.log('Logging out user');
-            window.auth.logout();
+            await window.auth.logout();
         } else {
             console.warn('Auth module not available for logout');
         }
@@ -235,3 +216,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export for use in other files
 export { waitForAuthAndCheck, initializeMainApp, addLogoutButton };
+
+// User Menu Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const userIcon = document.getElementById('userIcon');
+    const userDropdown = document.getElementById('userDropdown');
+    
+    // Toggle user menu
+    userIcon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        userDropdown.classList.toggle('active');
+        
+        // Close other menus if open
+        document.querySelectorAll('.user-dropdown').forEach(dropdown => {
+            if (dropdown !== userDropdown) {
+                dropdown.classList.remove('active');
+            }
+        });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!userIcon.contains(e.target) && !userDropdown.contains(e.target)) {
+            userDropdown.classList.remove('active');
+        }
+    });
+    
+    // Close menu on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && userDropdown.classList.contains('active')) {
+            userDropdown.classList.remove('active');
+        }
+    });
+    
+    // Add smooth transitions to menu items
+    const menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach((item, index) => {
+        item.style.animationDelay = `${index * 0.05}s`;
+    });
+    
+    // Handle menu item clicks
+    menuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Close menu after clicking
+            userDropdown.classList.remove('active');
+            
+            // You can add specific functionality for each menu item here
+            const text = this.textContent.trim();
+            
+            switch(text) {
+                case 'My Profile':
+                    console.log('Navigate to profile');
+                    break;
+                case 'Settings':
+                    console.log('Open settings');
+                    break;
+                case 'Analytics':
+                    console.log('Show analytics');
+                    break;
+                case 'My Memories':
+                    console.log('Show memories');
+                    break;
+                case 'Appearance':
+                    console.log('Open appearance settings');
+                    break;
+                case 'Sign Out':
+                    console.log('Sign out user');
+                    break;
+            }
+        });
+    });
+});

@@ -1,6 +1,16 @@
 # Node.js
 server/node_modules/
 server/.env
+server/secure-auth/.env
+server/secure-auth/node_modules/
+server/secure-auth/README.md
+server/secure-auth/create-test-user.js
+server/secure-auth/test-setup.js
+test-auth-debug.html
+server/serveralmostold.js
+server/package-lock.json
+server/package.json
+server/secure-auth/public/
 
 # VS Code settings
 .vscode/

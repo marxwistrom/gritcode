@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             // Redirect after a short delay
             setTimeout(() => {
-                console.log('Redirecting to index.html...');
-                window.location.href = 'index.html';
+                console.log('Redirecting to main page...');
+                window.location.href = '/';
             }, 1500);
         } else {
             console.log('Login failed:', result.message);
