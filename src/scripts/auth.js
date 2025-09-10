@@ -85,7 +85,7 @@ class Auth {
 
         // Clear local state
         this.currentUser = null;
-        window.location.href = '/login';
+        window.location.href = 'login.html';
     }
 
     /**

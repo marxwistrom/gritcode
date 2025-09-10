@@ -328,13 +328,51 @@ app.get('/api/auth/status', authMiddleware, (req, res) => {
     });
 });
 
-// Serve main page
+// Serve main page - redirect unauthenticated users to login page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../src/index.html'));
+    // Check if user is authenticated via cookie
+    const token = req.cookies.token;
+
+    if (!token) {
+        // No token, redirect to login page
+        console.log('Unauthenticated user trying to access main page, redirecting to login page');
+        return res.redirect('/login');
+    }
+
+    try {
+        // Verify the token
+        jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+        // Token is valid, show main page
+        console.log('Authenticated user accessing main page');
+        res.sendFile(path.join(__dirname, '../../src/index.html'));
+    } catch (error) {
+        // Token is invalid, clear it and redirect to login
+        res.clearCookie('token');
+        console.log('Invalid token cleared, redirecting to login page');
+        res.redirect('/login');
+    }
 });
 
-// Serve login page
+// Serve login page - redirect authenticated users to main page
 app.get('/login', (req, res) => {
+    // Check if user is already authenticated via cookie
+    const token = req.cookies.token;
+
+    if (token) {
+        try {
+            // Verify the token
+            jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+            // If token is valid, redirect to main page
+            console.log('Authenticated user trying to access login page, redirecting to main page');
+            return res.redirect('/');
+        } catch (error) {
+            // Token is invalid, clear it and show login page
+            res.clearCookie('token');
+            console.log('Invalid token cleared, showing login page');
+        }
+    }
+
+    // User is not authenticated, show login page
     res.sendFile(path.join(__dirname, '../../src/login.html'));
 });
 
